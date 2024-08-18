@@ -1,0 +1,358 @@
+:root {
+  --light-slideshow-bg: rgba(255, 255, 255, 0.9);
+  --light-slide-bg: white;
+  --light-text-color: #111;
+  --light-control-bg: rgba(0, 0, 0, 0.2);
+  --light-control-hover-bg: rgba(0, 0, 0, 0.3);
+  --light-toggle-bg: #f0f0f0;
+  --light-toggle-hover-bg: #e0e0e0;
+
+  --dark-slideshow-bg: rgba(0, 0, 0, 0.9);
+  --dark-slide-bg: #2f3437;
+  --dark-text-color: #e0e0e0;
+  --dark-control-bg: rgba(255, 255, 255, 0.2);
+  --dark-control-hover-bg: rgba(255, 255, 255, 0.3);
+  --dark-toggle-bg: #3f4447;
+  --dark-toggle-hover-bg: #4f5457;
+}
+
+#notion-slideshow {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: var(--slideshow-bg);
+  z-index: 9999;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  opacity: 0;
+  transition: opacity 0.3s ease;
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+}
+
+#notion-slideshow.visible {
+  opacity: 1;
+}
+
+#notion-slideshow[data-color-mode="light"] {
+  --slideshow-bg: var(--light-slideshow-bg);
+  --slide-bg: var(--light-slide-bg);
+  --text-color: var(--light-text-color);
+  --control-bg: var(--light-control-bg);
+  --control-hover-bg: var(--light-control-hover-bg);
+  --toggle-bg: var(--light-toggle-bg);
+  --toggle-hover-bg: var(--light-toggle-hover-bg);
+}
+
+#notion-slideshow[data-color-mode="dark"] {
+  --slideshow-bg: var(--dark-slideshow-bg);
+  --slide-bg: var(--dark-slide-bg);
+  --text-color: var(--dark-text-color);
+  --control-bg: var(--dark-control-bg);
+  --control-hover-bg: var(--dark-control-hover-bg);
+  --toggle-bg: var(--dark-toggle-bg);
+  --toggle-hover-bg: var(--dark-toggle-hover-bg);
+}
+
+.slide-container {
+  width: 80%;
+  height: 80%;
+  position: relative;
+  overflow: hidden;
+  border-radius: 8px;
+  box-shadow: 0 0 30px rgba(255, 255, 255, 0.1);
+}
+
+.slide {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: var(--slide-bg);
+  color: var(--text-color);
+  padding: 30px;
+  overflow-y: auto;
+  transition: transform 0.5s cubic-bezier(0.23, 1, 0.32, 1);
+  will-change: transform;
+}
+
+.slide.next {
+  transform: translateX(100%);
+}
+
+.slide.prev {
+  transform: translateX(-100%);
+}
+
+.slideshow-controls {
+  margin-top: 20px;
+  display: flex;
+  gap: 15px;
+}
+
+.slideshow-controls button {
+  background-color: var(--control-bg);
+  border: none;
+  color: var(--text-color);
+  padding: 12px 18px;
+  font-size: 16px;
+  cursor: pointer;
+  border-radius: 25px;
+  transition: background-color 0.3s ease, transform 0.1s ease;
+  outline: none;
+}
+
+.slideshow-controls button:hover,
+.slideshow-controls button:focus {
+  background-color: var(--control-hover-bg);
+}
+
+.slideshow-controls button:active {
+  transform: scale(0.95);
+}
+
+#slide-counter {
+  color: var(--text-color);
+  font-size: 16px;
+  margin: 0 15px;
+  font-weight: bold;
+}
+
+.slideshow-toggle {
+  margin-bottom: 10px;
+}
+
+.slideshow-toggle-header {
+  cursor: pointer;
+  padding: 10px;
+  background-color: var(--toggle-bg);
+  border-radius: 4px;
+  margin-bottom: 5px;
+  font-weight: bold;
+  display: flex;
+  align-items: center;
+  color: var(--text-color);
+}
+
+.slideshow-toggle-header:hover,
+.slideshow-toggle-header:focus {
+  background-color: var(--toggle-hover-bg);
+}
+
+.slideshow-toggle-header::before {
+  content: '▶';
+  display: inline-block;
+  margin-right: 5px;
+  transition: transform 0.3s ease;
+}
+
+.slideshow-toggle-header.open::before {
+  transform: rotate(90deg);
+}
+
+.slideshow-toggle-content {
+  padding-left: 20px;
+  border-left: 2px solid var(--text-color);
+  margin-left: 10px;
+  padding-top: 10px;
+  padding-bottom: 10px;
+  transition: max-height 0.3s ease-out, opacity 0.3s ease-out;
+  max-height: 0;
+  opacity: 0;
+  overflow: hidden;
+}
+
+.slideshow-toggle-content.open {
+  max-height: 1000px;
+  /* 適切な値に調整してください */
+  opacity: 1;
+}
+
+@media (max-width: 768px) {
+  .slide-container {
+    width: 95%;
+    height: 95%;
+  }
+
+  .slideshow-controls button {
+    padding: 10px 15px;
+    font-size: 14px;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+
+  #notion-slideshow,
+  .slide,
+  .slideshow-controls button,
+  .slideshow-toggle-header::before {
+    transition: none;
+  }
+}
+
+.slide .notion-callout-block {
+  margin: 0;
+  width: 100% !important;
+  height: auto;
+}
+
+.slide .notion-callout-block>div {
+  width: 100% !important;
+}
+
+/* アクセシビリティ向上のための追加スタイル */
+.slideshow-controls button:focus {
+  outline: 2px solid #fff;
+  outline-offset: 2px;
+}
+
+.slideshow-toggle-header:focus {
+  outline: 2px solid var(--text-color);
+  outline-offset: 2px;
+}
+
+/* スクロールバーのカスタマイズ */
+.slide::-webkit-scrollbar {
+  width: 8px;
+}
+
+.slide::-webkit-scrollbar-track {
+  background: rgba(0, 0, 0, 0.1);
+}
+
+.slide::-webkit-scrollbar-thumb {
+  background-color: rgba(0, 0, 0, 0.3);
+  border-radius: 4px;
+}
+
+.slide video {
+  max-width: 100%;
+  height: auto;
+  margin: 10px 0;
+}
+
+
+#notion-slideshow:fullscreen .slide video {
+  max-height: 70vh;
+  /* フルスクリーン時の最大高さを制限 */
+}
+
+/* 動画のコントロールバーのスタイル調整 */
+.slide video::-webkit-media-controls {
+  background-color: rgba(0, 0, 0, 0.5);
+}
+
+/* ダークモード時の動画コントロールバー */
+#notion-slideshow[data-color-mode="dark"] .slide video::-webkit-media-controls {
+  background-color: rgba(255, 255, 255, 0.2);
+}
+
+/* ダークモード時のスクロールバー */
+#notion-slideshow[data-color-mode="dark"] .slide::-webkit-scrollbar-track {
+  background: rgba(255, 255, 255, 0.1);
+}
+
+#notion-slideshow[data-color-mode="dark"] .slide::-webkit-scrollbar-thumb {
+  background-color: rgba(255, 255, 255, 0.3);
+}
+
+/* 画像のレスポンシブ対応 */
+.slide img {
+  max-width: 100%;
+  height: auto;
+}
+
+#notion-slideshow:fullscreen {
+  background-color: var(--slide-bg);
+  display: flex !important;
+  flex-direction: column !important;
+  justify-content: center !important;
+  align-items: center !important;
+  position: fixed !important;
+  left: 0 !important;
+  top: 0 !important;
+  right: 0 !important;
+  bottom: 0 !important;
+  width: 100% !important;
+  height: 100% !important;
+  margin: 0 !important;
+  padding: 0 !important;
+}
+
+#notion-slideshow:fullscreen .slide-container {
+  width: 95%;
+  height: 85%;
+  max-width: 1600px;
+  max-height: 900px;
+  border-radius: 0;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  aspect-ratio: 16 / 9;
+}
+
+#notion-slideshow:fullscreen .slide {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  padding: 40px;
+  text-align: left;
+  /* テキストを左揃えに戻す */
+}
+
+#notion-slideshow:fullscreen .notion-callout-block {
+  max-width: 90%;
+  margin: 0 auto;
+  text-align: left;
+  /* コールアウト内のテキストを左揃えに */
+}
+
+/* コールアウト内の要素のスタイルをリセット */
+#notion-slideshow:fullscreen .notion-callout-block * {
+  text-align: inherit;
+}
+
+/* スライドコントロールの位置調整 */
+#notion-slideshow:fullscreen .slideshow-controls {
+  position: fixed;
+  bottom: 20px;
+  left: 50%;
+  transform: translateX(-50%);
+}
+
+/* レスポンシブ対応 */
+@media (max-aspect-ratio: 16/9) {
+  #notion-slideshow:fullscreen .slide-container {
+    width: 95%;
+    height: auto;
+    aspect-ratio: 16 / 9;
+  }
+}
+
+@media (max-width: 1200px) {
+  #notion-slideshow:fullscreen .slide-container {
+    width: 95%;
+    height: 80%;
+    aspect-ratio: auto;
+  }
+}
+
+@media (max-width: 768px) {
+  #notion-slideshow:fullscreen .slide-container {
+    width: 100%;
+    height: 100%;
+  }
+
+  #notion-slideshow:fullscreen .slide {
+    padding: 20px;
+  }
+
+  #notion-slideshow:fullscreen .notion-callout-block {
+    max-width: 95%;
+  }
+}

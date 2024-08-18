@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Notion Slideshow</title>
+  <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500&display=swap" rel="stylesheet">
+  <style>
+    body {
+      width: 300px;
+      padding: 20px;
+      font-family: 'Roboto', sans-serif;
+      background-color: #f5f5f5;
+      color: #333;
+      transition: background-color 0.3s, color 0.3s;
+    }
+    body.dark {
+      background-color: #2c2c2c;
+      color: #fff;
+    }
+    h1 {
+      text-align: center;
+      font-weight: 500;
+      margin-bottom: 20px;
+      font-size: 24px;
+    }
+    .mode-selector {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      margin-bottom: 20px;
+    }
+    .switch {
+      position: relative;
+      display: inline-block;
+      width: 60px;
+      height: 34px;
+    }
+    .switch input {
+      opacity: 0;
+      width: 0;
+      height: 0;
+    }
+    .slider {
+      position: absolute;
+      cursor: pointer;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background-color: #ccc;
+      transition: .4s;
+      border-radius: 34px;
+    }
+    .slider:before {
+      position: absolute;
+      content: "";
+      height: 26px;
+      width: 26px;
+      left: 4px;
+      bottom: 4px;
+      background-color: white;
+      transition: .4s;
+      border-radius: 50%;
+    }
+    input:checked + .slider {
+      background-color: #2196F3;
+    }
+    input:checked + .slider:before {
+      transform: translateX(26px);
+    }
+    .mode-label {
+      margin: 0 10px;
+      font-weight: 300;
+    }
+    #start-slideshow {
+      width: 100%;
+      padding: 12px;
+      background-color: #4CAF50;
+      color: white;
+      border: none;
+      border-radius: 4px;
+      font-size: 16px;
+      font-weight: 500;
+      cursor: pointer;
+      transition: background-color 0.3s;
+    }
+    #start-slideshow:hover {
+      background-color: #45a049;
+    }
+    body.dark #start-slideshow {
+      background-color: #bb86fc;
+      color: #000;
+    }
+    body.dark #start-slideshow:hover {
+      background-color: #a370f7;
+    }
+  </style>
+</head>
+<body>
+  <h1>Notion Slideshow</h1>
+  <div class="mode-selector">
+    <span class="mode-label">Light</span>
+    <label class="switch">
+      <input type="checkbox" id="mode-toggle">
+      <span class="slider"></span>
+    </label>
+    <span class="mode-label">Dark</span>
+  </div>
+  <button id="start-slideshow">Start Slideshow</button>
+  <script src="popup.js"></script>
+</body>
+</html>

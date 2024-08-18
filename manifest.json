@@ -1,0 +1,25 @@
+{
+  "manifest_version": 3,
+  "name": "Notion Slideshow",
+  "version": "1.0",
+  "description": "Display Notion callouts as a slideshow",
+  "permissions": ["activeTab"],
+  "icons": {
+    "128": "notionslide_icon.png"
+  },
+  "action": {
+    "default_icon": "notionslide_icon.png",
+    "default_popup": "popup.html"
+  },
+  "content_scripts": [
+    {
+      "matches": ["https://www.notion.so/*"],
+      "js": ["content.js"],
+      "css": ["styles/slideshow.css"]
+    }
+  ],
+  "background": {
+    "service_worker": "background.js",
+    "type": "module"
+  }
+}
