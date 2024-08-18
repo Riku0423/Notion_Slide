@@ -1,2 +1,3 @@
 # Notion_Slide
-Notionでスライドを作成できます
+Notionのコールアウトをスライド風に表示することができるChrome拡張機能を作成しました！
+　
